@@ -14,11 +14,9 @@ class _SignUpPageState extends State<SignUpPage> {
   String? lastName;
   String? email;
   String? password;
-  String? confirmPassword;
 
   void _signUp() {
     if (_formKey.currentState!.validate()) {
-      // Adicione a lógica de cadastro aqui
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Cadastro realizado com sucesso!')),
       );
@@ -29,8 +27,18 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Cadastro'),
         backgroundColor: Colors.black,
+        title: Row(
+          children: [
+            Image.asset(
+              'images/logotipo.png',
+              height: 40, // Tamanho da imagem
+              fit: BoxFit.contain,
+            ),
+            const SizedBox(width: 10), // Espaço entre a imagem e o texto
+            const Text('Cadastro'),
+          ],
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -49,15 +57,9 @@ class _SignUpPageState extends State<SignUpPage> {
                   labelText: 'Nome',
                   border: OutlineInputBorder(),
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Por favor, insira seu nome';
-                  }
-                  return null;
-                },
-                onChanged: (value) {
-                  firstName = value;
-                },
+                validator: (value) =>
+                    value == null || value.isEmpty ? 'Por favor, insira seu nome' : null,
+                onChanged: (value) => firstName = value,
               ),
               const SizedBox(height: 20),
               TextFormField(
@@ -65,15 +67,9 @@ class _SignUpPageState extends State<SignUpPage> {
                   labelText: 'Sobrenome',
                   border: OutlineInputBorder(),
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Por favor, insira seu sobrenome';
-                  }
-                  return null;
-                },
-                onChanged: (value) {
-                  lastName = value;
-                },
+                validator: (value) =>
+                    value == null || value.isEmpty ? 'Por favor, insira seu sobrenome' : null,
+                onChanged: (value) => lastName = value,
               ),
               const SizedBox(height: 20),
               TextFormField(
@@ -90,9 +86,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   }
                   return null;
                 },
-                onChanged: (value) {
-                  email = value;
-                },
+                onChanged: (value) => email = value,
               ),
               const SizedBox(height: 20),
               TextFormField(
@@ -110,9 +104,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   }
                   return null;
                 },
-                onChanged: (value) {
-                  password = value;
-                },
+                onChanged: (value) => password = value,
               ),
               const SizedBox(height: 20),
               TextFormField(

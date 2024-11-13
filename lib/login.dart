@@ -1,37 +1,7 @@
-import 'package:flutter/material.dart'
-    show
-        AppBar,
-        BuildContext,
-        Colors,
-        Column,
-        EdgeInsets,
-        ElevatedButton,
-        FontWeight,
-        Form,
-        FormState,
-        GlobalKey,
-        InputDecoration,
-        MainAxisAlignment,
-        MaterialApp,
-        MaterialPageRoute,
-        Navigator,
-        OutlineInputBorder,
-        Padding,
-        Scaffold,
-        ScaffoldMessenger,
-        SizedBox,
-        SnackBar,
-        State,
-        StatefulWidget,
-        StatelessWidget,
-        Text,
-        TextButton,
-        TextFormField,
-        TextStyle,
-        ThemeData,
-        Widget,
-        runApp;
+import 'package:flutter/material.dart';
 import 'package:powerflex_application/cadastro.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 void main() {
   runApp(const MyApp());
@@ -64,10 +34,11 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   String? email;
   String? password;
+  bool _obscurePassword = true; // Estado para alternar entre mostrar/ocultar senha
 
+  // Função para lidar com o login
   void _login() {
     if (_formKey.currentState!.validate()) {
-      // Adicione a lógica de login aqui
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Login realizado com sucesso!')),
       );
@@ -78,8 +49,18 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Powerflex'),
         backgroundColor: Colors.black,
+        title: Row(
+          children: [
+            Image.asset(
+              'images/logotipo.png',
+              height: 40, // Altura da imagem
+              fit: BoxFit.contain,
+            ),
+            const SizedBox(width: 10), // Espaço entre a imagem e o texto
+            const Text('Powerflex'),
+          ],
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -97,6 +78,7 @@ class _LoginPageState extends State<LoginPage> {
                 decoration: const InputDecoration(
                   labelText: 'E-mail',
                   border: OutlineInputBorder(),
+                  suffixIcon: Icon(Icons.email), // Ícone à direita
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -113,10 +95,20 @@ class _LoginPageState extends State<LoginPage> {
               ),
               const SizedBox(height: 20),
               TextFormField(
-                obscureText: true,
-                decoration: const InputDecoration(
+                obscureText: _obscurePassword,
+                decoration: InputDecoration(
                   labelText: 'Senha',
-                  border: OutlineInputBorder(),
+                  border: const OutlineInputBorder(),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _obscurePassword ? Icons.visibility : Icons.visibility_off,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _obscurePassword = !_obscurePassword;
+                      });
+                    },
+                  ),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -142,8 +134,8 @@ class _LoginPageState extends State<LoginPage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) =>
-                            const SignUpPage()), // Certifique-se de que esta linha está importando corretamente
+                      builder: (context) => const SignUpPage(),
+                    ),
                   );
                 },
                 child: const Text('Não tem uma conta? Cadastre-se'),
